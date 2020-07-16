@@ -1,0 +1,218 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "",
+  "apiProfile": "",
+  "parameters": {  },
+  "variables": {  },
+  "functions": [  ],
+  "resources": [ {
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "osProfile": {
+               "windowsConfiguration": {
+                  "enableAutomaticUpdates": true
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "storageProfile": {
+               "osDisk": {
+                  "encryptionSettings": {
+                     "enabled": true
+                  }
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Network/applicationGateways",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "webApplicationFirewallConfiguration": {
+               "enabled": true
+            }
+          }
+        }, {
+          "type": "Microsoft.Storage/storageAccounts",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "encryption": {
+               "services": {
+                  "blob": {
+                     "enabled": true
+                  }
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Storage/storageAccounts",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "encryption": {
+               "services": {
+                  "file": {
+                     "enabled": true
+                  }
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Sql/servers/auditingSettings",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "retentionDays": 100
+          }
+        }, {
+          "type": "Microsoft.Sql/servers/databases/auditingSettings",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "retentionDays": 100
+          }
+        }, {
+          "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "retentionDays": 100,
+            "disabledAlerts": []
+          }
+        }, {
+          "type": "Microsoft.Sql/servers/securityAlertPolicies",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "retentionDays": 100,
+            "disabledAlerts": []
+          }
+        }, {
+          "type": "Microsoft.insights/logprofiles",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "retentionPolicy": {
+               "enabled": true,
+               "days": 400
+            }
+          }
+        }, {
+          "type": "Microsoft.insights/activityLogAlerts",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "enabled": true,
+            "condition": {
+               "allOf": [
+                  {
+                     "field":"operationName",
+                     "equals":"Microsoft.Network/networkSecurityGroups/write"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Authorization/policyAssignments/write"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Network/networkSecurityGroups/delete"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Network/networkSecurityGroups/securityRules/write"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Network/networkSecurityGroups/securityRules/delete"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Security/securitySolutions/write"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Security/securitySolutions/delete"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Sql/servers/firewallRules/write"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Sql/servers/firewallRules/delete"
+                  },{
+                     "field":"operationName",
+                     "equals":"Microsoft.Security/policies/write"
+                  }
+               ]
+            }
+          }
+        }, {
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "osProfile": {
+               "linuxConfiguration": {
+                  "disablePasswordAuthentication": true
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "storageProfile": {
+               "osDisk": {
+                  "encryptionSettings": {
+                     "enabled": true
+                  }
+               }
+            }
+          }
+        }, {
+          "type": "Microsoft.Sql/servers/databases",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "collations": "randomn string"
+          },
+          "resources": [
+            {
+              "name": "current",
+              "type": "transparentDataEncryption",
+              "properties": {
+                "status": "Disabled"
+              }
+            }
+          ]
+        }, {
+          "type": "",
+          "name": "resource_ref_",
+          "apiVersion": "2016-09-01",
+          "properties": {
+            "": ""
+          }
+        }
+      ],
+  "outputs": {  },
+  "TrustedNetworkGroup": {
+
+      "Type": "AWS::EC2::SecurityGroup",
+
+      "Properties": {
+
+        "GroupDescription": "Enable TCP access from trusted network",
+
+        "SecurityGroupIngress": [
+
+         
+
+{             "IpProtocol": "tcp",             "FromPort": "0",             "ToPort": "65535",             "CidrIp": "0.0.0.0/0"           }
+        ],
+
+        "VpcId":
+
+{           "Ref": "VPCID"         }
+      }
+}
