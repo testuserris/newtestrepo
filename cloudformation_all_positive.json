@@ -1,0 +1,156 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description" : "Cloudformation testing template",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "7751202e-6cc3-4b34-aa87-5247e7d1c4e7": {
+                "size": {
+                    "width": 62,
+                    "height": 60
+                },
+                "position": {
+                    "x": 747,
+                    "y": 211
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "12a6165f-ffbb-4e6b-adba-333a59fd6bf9": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 599,
+                    "y": 222
+                },
+                "z": 0,
+                "embeds": []
+            }
+        }
+    },
+    "Resources" : {
+        "MyEC2Instance" : {
+          "Type" : "AWS::EC2::Instance",
+          "Properties" : {
+            "ImageId" : "ami-79fd7eee",
+            "KeyName" : "testkey",
+            "BlockDeviceMappings" : [
+               {
+                  "DeviceName" : "/dev/sdm",
+                  "Ebs" : {
+                     "VolumeType" : "io1",
+                     "Iops" : "200",
+                     "DeleteOnTermination" : "false",
+                     "VolumeSize" : "20"
+                  }
+               },
+               {
+                  "DeviceName" : "/dev/sdk",
+                  "NoDevice" : {}
+               }
+            ]
+          }
+        },
+        "MahS3Bucket" : {
+            "Type" : "AWS::S3::Bucket",
+            "Properties" : {
+              "AccessControl" : "Private",
+              "WebsiteConfiguration" : {
+                "IndexDocument" : "index.html",
+                "ErrorDocument" : "error.html"            
+              },
+              "VersioningConfiguration": {
+                "Status": "Enabled"
+              },
+              "Tags" : [
+                {
+                  "Key" : "keyname1",
+                  "Value" : "value1"
+                },
+                {
+                  "Key" : "keyname2",
+                  "Value" : "value2"
+                }
+              ],
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+        },
+        "MahRDSInstance" : {
+          "Type" : "AWS::RDS::DBInstance",
+          "Properties" : {
+            "AllocatedStorage" : "100",
+            "DBInstanceClass" : "db.m1.small",
+            "Engine" : "MySQL",
+            "EngineVersion" : "5.6.13",
+            "Iops" : "1000",
+            "MasterUsername" : "master",
+            "MasterUserPassword" : "Password123",
+            "DeletionProtection": true,
+            "PubliclyAccessible": false,
+            "StorageEncrypted": true
+          }
+        },
+        "MahRedshiftCluster": {
+          "Type": "AWS::Redshift::Cluster",
+          "Properties": {
+            "DBName": "mydb", 
+            "MasterUsername": "master",
+            "MasterUserPassword": "Password123",
+            "NodeType": "ds2.xlarge",
+            "ClusterType": "single-node",
+            "Tags": [
+              {
+                "Key": "foo",
+                "Value": "bar"
+              }
+            ],
+            "Encrypted" : true,
+            "PubliclyAccessible" : false
+          }
+        },
+        "NewVolume" : {
+          "Type" : "AWS::EC2::Volume",
+          "Properties" : {
+            "Size" : "100",
+            "Encrypted" : true,
+            "AvailabilityZone" : { "Fn::GetAtt" : [ "MyEC2Instance", "AvailabilityZone" ] },
+            "Tags" : [ 
+              {
+                "Key" : "MyTag",
+                "Value" : "TagValue"
+              } 
+            ]
+          },
+          "DeletionPolicy" : "Snapshot"
+        }
+      },
+      "TrustedNetworkGroup": {
+
+      "Type": "AWS::EC2::SecurityGroup",
+
+      "Properties": {
+
+        "GroupDescription": "Enable TCP access from trusted network",
+
+        "SecurityGroupIngress": [
+
+         
+
+{             "IpProtocol": "tcp",             "FromPort": "0",             "ToPort": "65535",             "CidrIp": "0.0.0.0/0"           }
+        ],
+
+        "VpcId":
+
+{           "Ref": "VPCID"         }
+      }
+
+}
