@@ -1,0 +1,194 @@
+{
+  "provider": {
+    "azurerm": {
+      "version": "=1.21.0"
+    }
+  },
+  "resource": {
+    "azurerm_managed_disk": {
+      "test": {
+        "create_option": "Empty",
+        "disk_size_gb": "1",
+        "encryption_settings": {
+          "enabled": true
+        },
+        "location": "West US 2",
+        "name": "acctestmd",
+        "resource_group_name": "${azurerm_resource_group.test.name}",
+        "storage_account_type": "Standard_LRS"
+      }
+    },
+    "azurerm_monitor_log_profile": {
+      "test": {
+        "categories": [
+          "Action",
+          "Delete",
+          "Write"
+        ],
+        "locations": [
+          "westus",
+          "global"
+        ],
+        "name": "default",
+        "retention_policy": {
+          "days": 365,
+          "enabled": true
+        },
+        "servicebus_rule_id": "${azurerm_eventhub_namespace.test.id}/authorizationrules/RootManageSharedAccessKey",
+        "storage_account_id": "${azurerm_storage_account.test.id}"
+      }
+    },
+    "azurerm_network_security_group": {
+      "test": {
+        "location": "${azurerm_resource_group.test.location}",
+        "name": "acceptanceTestSecurityGroup1",
+        "resource_group_name": "${azurerm_resource_group.test.name}",
+        "security_rule": {
+          "access": "Allow",
+          "destination_address_prefix": "*",
+          "destination_port_range": "*",
+          "direction": "Inbound",
+          "name": "test123",
+          "priority": 100,
+          "protocol": "Tcp",
+          "source_address_prefix": "*",
+          "source_port_range": "*"
+        },
+        "tags": {
+          "environment": "Production"
+        }
+      }
+    },
+    "azurerm_resource_group": {
+      "test": {
+        "location": "West US",
+        "name": "acceptanceTestResourceGroup1"
+      }
+    },
+    "azurerm_security_center_contact": {
+      "example": {
+        "alert_notifications": true,
+        "alerts_to_admins": true,
+        "email": "contact@example.com",
+        "phone": "+1-555-555-5555"
+      }
+    },
+    "azurerm_security_center_subscription_pricing": {
+      "example": {
+        "tier": "Standard"
+      }
+    },
+    "azurerm_sql_database": {
+      "test": {
+        "location": "West US",
+        "name": "mysqldatabase",
+        "resource_group_name": "${azurerm_resource_group.test.name}",
+        "server_name": "${azurerm_sql_server.test.name}",
+        "threat_detection_policy": {
+          "disabled_alerts": "",
+          "email_account_admins": true,
+          "email_addresses": [
+            "a@sophos.com",
+            "b@sophos.com"
+          ],
+          "retention_days": 90,
+          "state": "Enabled"
+        }
+      }
+    },
+    "azurerm_sql_firewall_rule": {
+      "test": {
+        "end_ip_address": "10.0.17.62",
+        "name": "FirewallRule1",
+        "resource_group_name": "usygd",
+        "server_name": "sjhgd",
+        "start_ip_address": "3.0.2.1"
+      }
+    },
+    "azurerm_sql_server": {
+      "test": {
+        "administrator_login": "4dm1n157r470r",
+        "administrator_login_password": "4-v3ry-53cr37-p455w0rd",
+        "location": "West US",
+        "name": "mysqlserver",
+        "resource_group_name": "${azurerm_resource_group.test.name}",
+        "version": "12.0"
+      }
+    },
+    "azurerm_storage_account": {
+      "testsa": {
+        "account_tier": "Standard",
+        "enable_blob_encryption": true,
+        "enable_file_encryption": true,
+        "location": "westus",
+        "name": "storageaccountname",
+        "resource_group_name": "${azurerm_resource_group.testrg.name}",
+        "tags": {
+          "environment": "staging"
+        }
+      }
+    },
+    "azurerm_virtual_machine": {
+      "main_linux": {
+        "os_profile_linux_config": {
+          "disable_password_authentication": true
+        },
+        "os_profile_windows_config": {
+          "enable_automatic_upgrades": true
+        }
+      }
+    },
+    "azurerm_monitor_activity_log_alert": {
+      "alert1": {
+        "criteria": {
+          "operation_name": "Microsoft.Network/networkSecurityGroups/write"
+        }
+      },
+      "alert2": {
+        "criteria": {
+          "operation_name": "Microsoft.Authorization/policyAssignments/write"
+        }
+      },
+      "alert3": {
+        "criteria": {
+          "operation_name": "Microsoft.Network/networkSecurityGroups/delete"
+        }
+      },
+      "alert4": {
+        "criteria": {
+          "operation_name": "Microsoft.Network/networkSecurityGroups/securityRules/write"
+        }
+      },
+      "alert5": {
+        "criteria": {
+          "operation_name": "Microsoft.Network/networkSecurityGroups/securityRules/delete"
+        }
+      },
+      "alert6": {
+        "criteria": {
+          "operation_name": "Microsoft.Security/securitySolutions/write"
+        }
+      },
+      "alert7": {
+        "criteria": {
+          "operation_name": "Microsoft.Security/securitySolutions/delete"
+        }
+      },
+      "alert8": {
+        "criteria": {
+          "operation_name": "Microsoft.Sql/servers/firewallRules/write"
+        }
+      },
+      "alert9": {
+        "criteria": {
+          "operation_name": "Microsoft.Sql/servers/firewallRules/delete"
+        }
+      },
+      "alert10": {
+        "criteria": {
+          "operation_name": "Microsoft.Security/policies/write"
+        }
+      }
+    }
+  }
+}
