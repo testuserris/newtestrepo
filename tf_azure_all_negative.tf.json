@@ -134,11 +134,11 @@
                     "disable_password_authentication": false
                 }
             },
-            "main_windows": {
+        /*    "main_windows": {
                 "os_profile_windows_config": {
                     "enable_automatic_upgrades": false
                 }
-            }
+            }*/
         }
     }
 }
