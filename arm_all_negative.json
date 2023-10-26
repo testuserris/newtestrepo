@@ -24,6 +24,21 @@
           }
         },
 
+         "apiProfile":"",
+  "resources":[
+    {
+      "apiVersion":"2017-09-01",
+      "name":"resource_ref_1",
+      "type":"Microsoft.Compute/virtualMachines",
+      "properties":{
+        "storageProfile":{
+          "osDisk":{
+            "encryptionSettings":{
+              "enabled":false
+            }
+          }
+        },
+
           "resources":[
     {
       "apiVersion":"2016-09-01",
