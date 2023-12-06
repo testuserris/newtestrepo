@@ -1,0 +1,427 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Cloudformation testing template",
+  "Metadata": {
+    "AWS::CloudFormation::Designer": {
+      "7751202e-6cc3-4b34-aa87-5247e7d1c4e7": {
+        "size": {
+          "width": 62,
+          "height": 60
+        },
+        "position": {
+          "x": 747,
+          "y": 211
+        },
+        "z": 0,
+        "embeds": []
+      },
+      "12a6165f-ffbb-4e6b-adba-333a59fd6bf9": {
+        "size": {
+          "width": 60,
+          "height": 60
+        },
+        "position": {
+          "x": 599,
+          "y": 222
+        },
+        "z": 0,
+        "embeds": []
+      }
+    }
+  },
+  "Resources": {
+    "MyEC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": "ami-79fd7eee",
+        "KeyName": "testkey",
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sdm",
+            "Ebs": {
+              "VolumeType": "io1",
+              "Iops": "200",
+              "DeleteOnTermination": "false",
+              "VolumeSize": "20"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdk",
+            "NoDevice": {}
+          }
+        ]
+      }
+    },
+    "MahS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicReadWrite",
+        "BucketName": "MahS3Bucket",
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+          "ErrorDocument": "error.html"
+        },
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "MahRDSInstance": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "AllocatedStorage": "100",
+        "DBInstanceClass": "db.m1.small",
+        "Engine": "MySQL",
+        "EngineVersion": "5.6.13",
+        "Iops": "1000",
+        "MasterUsername": "master",
+        "MasterUserPassword": "Password123",
+        "DeletionProtection": false,
+        "PubliclyAccessible": true,
+        "StorageEncrypted": false
+      }
+    },
+    "MahRedshiftCluster": {
+      "Type": "AWS::Redshift::Cluster",
+      "Properties": {
+        "DBName": "mydb",
+        "MasterUsername": "master",
+        "MasterUserPassword": "Password123",
+        "NodeType": "ds2.xlarge",
+        "ClusterType": "single-node",
+        "Encrypted": false,
+        "PubliclyAccessible": true
+      }
+    },
+    "MahAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": "MahUser"
+      }
+    },
+    "MahAccessKey2": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": "MahUser"
+      }
+    },
+    "MyIAMPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "Users": [
+          "MahUser"
+        ]
+      }
+    },
+    "MyCloudtrail": {
+      "Type": "AWS::CloudTrail::Trail",
+      "Properties": {
+        "S3BucketName": "MahS3Bucket"
+      }
+    },
+    "MyVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "ResourceId": "MahS3Bucket"
+      }
+    },
+    "MyKMSKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "EnableKeyRotation": false
+      }
+    },
+    "MySecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "ToPort": 22
+      }
+    },
+    "MySecurityGroup2": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "ToPort": 3389
+      }
+    },
+    "NewVolume": {
+      "Type": "AWS::EC2::Volume",
+      "Properties": {
+        "Size": "100",
+        "Encrypted": "true",
+        "AvailabilityZone": {
+          "Fn::GetAtt": [
+            "MyEC2Instance",
+            "AvailabilityZone"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "MyTag",
+            "Value": "TagValue"
+          }
+        ]
+      },
+      "DeletionPolicy": "Snapshot"
+    },
+    "CredRes1": {
+      "Type": "Alexa::ASK::Skill",
+      "Properties": {
+        "AuthenticationConfiguration": {
+          "ClientSecret": "MahPassword",
+          "Value": "TagValue"
+        }
+      }
+    },
+    "CredRes2": {
+      "Type": "AWS::AmazonMQ::Broker",
+      "Properties": {
+        "Users": [
+          {
+            "Password": "TagValue"
+          }
+        ]
+      }
+    },
+    "CredRes3": {
+      "Type": "AWS::Amplify::App",
+      "Properties": {
+        "OauthToken": "Password",
+        "AccessToken": "Password",
+        "BasicAuthConfig": {
+          "Password": "TagValue"
+        },
+        "AutoBranchCreationPatterns": {
+          "BasicAuthConfig": {
+            "Password": "TagValue"
+          }
+        }
+      }
+    },
+    "CredRes4": {
+      "Type": "AWS::Amplify::Branch",
+      "Properties": {
+        "BasicAuthConfig": {
+          "Password": "TagValue"
+        }
+      }
+    },
+    "CredRes5": {
+      "Type": "AWS::AppStream::DirectoryConfig",
+      "Properties": {
+        "ServiceAccountCredentials": {
+          "AccountPassword": "TagValue"
+        }
+      }
+    },
+    "CredRes6": {
+      "Type": "AWS::CodeBuild::ReportGroup",
+      "Properties": {
+        "ExportConfig": {
+          "S3Destination": {
+            "EncryptionKey": "TagValue"
+          }
+        }
+      }
+    },
+    "CredRes7": {
+      "Type": "AWS::CodeBuild::SourceCredential",
+      "Properties": {
+        "Token": "Password"
+      }
+    },
+    "CredRes8": {
+      "Type": "AWS::CodeCommit::Repository",
+      "Properties": {
+        "Code": {
+          "S3": {
+            "Key": "TagValue"
+          }
+        }
+      }
+    },
+    "CredRes9": {
+      "Type": "AWS::CodePipeline::Webhook",
+      "Properties": {
+        "AuthenticationConfiguration": {
+          "SecretToken": "MahPassword"
+        }
+      }
+    },
+    "CredRes10": {
+      "Type": "AWS::CodeStar::GitHubRepository",
+      "Properties": {
+        "RepositoryAccessToken": "Password"
+      }
+    },
+    "CredRes11": {
+      "Type": "AWS::DirectoryService::MicrosoftAD",
+      "Properties": {
+        "Password": "Password"
+      }
+    },
+    "CredRes12": {
+      "Type": "AWS::DirectoryService::SimpleAD",
+      "Properties": {
+        "Password": "Password"
+      }
+    },
+    "CredRes13": {
+      "Type": "AWS::DMS::Endpoint",
+      "Properties": {
+        "Password": "Password",
+        "MongoDbSettings": {
+          "Password": "TagValue"
+        }
+      }
+    },
+    "CredRes14": {
+      "Type": "AWS::DocDB::DBCluster",
+      "Properties": {
+        "MasterUserPassword": "Password"
+      }
+    },
+    "CredRes15": {
+      "Type": "AWS::FSx::FileSystem",
+      "Properties": {
+        "WindowsConfiguration": {
+          "SelfManagedActiveDirectoryConfiguration": {
+            "Password": "TagValue"
+          }
+        }
+      }
+    },
+    "CredRes16": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "LoginProfile": {
+          "Password": "TagValue"
+        }
+      }
+    },
+    "CredRes17": {
+      "Type": "AWS::KinesisFirehose::DeliveryStream",
+      "Properties": {
+        "RedshiftDestinationConfiguration": {
+          "Password": "TagValue"
+        },
+        "SplunkDestinationConfiguration": {
+          "HECToken": "TagValue"
+        }
+      }
+    },
+    "CredRes18": {
+      "Type": "AWS::ManagedBlockchain::Member",
+      "Properties": {
+        "MemberConfiguration": {
+          "MemberFrameworkConfiguration": {
+            "MemberFabricConfiguration": {
+              "AdminPassword": "TagValue"
+            }
+          }
+        }
+      }
+    },
+    "CredRes19": {
+      "Type": "AWS::OpsWorks::App",
+      "Properties": {
+        "AppSource": {
+          "Password": "TagValue",
+          "SshKey": "RSA PRIVATE"
+        },
+        "SslConfiguration": {
+          "PrivateKey": "RSA PRIVATE"
+        }
+      }
+    },
+    "CredRes20": {
+      "Type": "AWS::OpsWorks::Stack",
+      "Properties": {
+        "CustomCookbooksSource": {
+          "Password": "TagValue",
+          "SshKey": "RSA PRIVATE"
+        },
+        "RdsDbInstances": [
+          {
+            "DbPassword": "TagValue"
+          }
+        ]
+      }
+    },
+    "CredRes21": {
+      "Type": "AWS::OpsWorksCM::Server",
+      "Properties": {
+        "CustomPrivateKey": "RSA PRIVATE"
+      }
+    },
+    "CredRes22": {
+      "Type": "AWS::Pinpoint::ADMChannel",
+      "Properties": {
+        "ClientSecret": "Password"
+      }
+    },
+    "CredRes23": {
+      "Type": "AWS::Pinpoint::APNSChannel",
+      "Properties": {
+        "TokenKey": "Password",
+        "PrivateKey": "RSA PRIVATE"
+      }
+    },
+    "CredRes24": {
+      "Type": "AWS::Pinpoint::APNSSandboxChannel",
+      "Properties": {
+        "TokenKey": "Password",
+        "PrivateKey": "RSA PRIVATE"
+      }
+    },
+    "CredRes25": {
+      "Type": "AWS::Pinpoint::APNSVoipChannel",
+      "Properties": {
+        "TokenKey": "Password",
+        "PrivateKey": "RSA PRIVATE"
+      }
+    },
+    "CredRes26": {
+      "Type": "AWS::Pinpoint::APNSVoipSandboxChannel",
+      "Properties": {
+        "TokenKey": "Password",
+        "PrivateKey": "RSA PRIVATE"
+      }
+    },
+    "CredRes27": {
+      "Type": "AWS::Pinpoint::BaiduChannel",
+      "Properties": {
+        "ApiKey": "Password",
+        "SecretKey": "Someuyftvjhkbdln"
+      }
+    },
+    "CredRes28": {
+      "Type": "AWS::Pinpoint::GCMChannel",
+      "Properties": {
+        "ApiKey": "Password"
+      }
+    },
+    "CredRes29": {
+      "Type": "AWS::RDS::DBCluster",
+      "Properties": {
+        "MasterUserPassword": "Password"
+      }
+    },
+    "TrustedNetworkGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable TCP access from trusted network",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "0",
+            "ToPort": "65535",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPCID"
+        }
+      }
+    }
+  }
+}
